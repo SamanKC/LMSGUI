@@ -4,3 +4,9 @@ ISBN: 1111111111111
 Genre: Fiction
 Year: 2000
 
+Title: Java
+Author: Saman
+ISBN: 1234567891234
+Genre: Novel
+Year: 1995
+

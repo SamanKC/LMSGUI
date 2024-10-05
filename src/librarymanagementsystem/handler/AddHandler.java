@@ -156,38 +156,71 @@ public class AddHandler extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
-          String title = titleField.getText().trim();
-        String author = authorField.getText().trim();
-        String isbnString = isbnField.getText().trim();
-        Long isbn = Long.valueOf(isbnString);
-        String genre = genreField.getSelectedItem().toString();
-        int year;
+       String title = titleField.getText().trim();
+String author = authorField.getText().trim();
+String isbnString = isbnField.getText().trim();
+String genre = genreField.getSelectedItem() != null ? genreField.getSelectedItem().toString() : "";
+int year;
 
-        // Validate input
-        if (title.isEmpty() || author.isEmpty() || isbnString.isEmpty() || genre.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "All fields (Title, Author, ISBN, Genre) are required!", "Input Error", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
+// Validate input
+if (title.isEmpty()) {
+    JOptionPane.showMessageDialog(this, "Title field is required!", "Input Error", JOptionPane.WARNING_MESSAGE);
+    titleField.requestFocus(); // Set focus to the title field
+    return;
+}
 
-        try {
-            year = Integer.parseInt(yearField.getText().trim());
-            if (year <= 0) {
-                JOptionPane.showMessageDialog(this, "Year must be a positive number!", "Year Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Please enter a valid year!", "Year Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+if (author.isEmpty()) {
+    JOptionPane.showMessageDialog(this, "Author field is required!", "Input Error", JOptionPane.WARNING_MESSAGE);
+    authorField.requestFocus(); // Set focus to the author field
+    return;
+}
 
-        // Validate ISBN
-        if (!isValidIsbn(isbn)) {
-            JOptionPane.showMessageDialog(this, "Invalid ISBN format! Please enter a valid ISBN.", "ISBN Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+if (isbnString.isEmpty()) {
+    JOptionPane.showMessageDialog(this, "ISBN field is required!", "Input Error", JOptionPane.WARNING_MESSAGE);
+    isbnField.requestFocus(); // Set focus to the ISBN field
+    return;
+}
 
-        // Save book to output.txt
-        saveBookToFile(new Book(title, author, isbn, genre, year));
+// Validate ISBN and parse it
+Long isbn;
+try {
+    isbn = Long.valueOf(isbnString); // Try to parse the ISBN
+} catch (NumberFormatException e) {
+    JOptionPane.showMessageDialog(this, "Invalid ISBN format! Please enter a valid ISBN.", "ISBN Error", JOptionPane.ERROR_MESSAGE);
+    isbnField.requestFocus(); // Set focus to the ISBN field
+    return;
+}
+
+if (genre.isEmpty()) {
+    JOptionPane.showMessageDialog(this, "Genre must be selected!", "Input Error", JOptionPane.WARNING_MESSAGE);
+    genreField.requestFocus(); // Set focus to the genre combo box
+    return;
+}
+
+try {
+    year = Integer.parseInt(yearField.getText().trim());
+    if (year <= 0) {
+        JOptionPane.showMessageDialog(this, "Year must be a positive number!", "Year Error", JOptionPane.ERROR_MESSAGE);
+        yearField.requestFocus(); // Set focus to the year field
+        return;
+    }
+} catch (NumberFormatException e) {
+    JOptionPane.showMessageDialog(this, "Please enter a valid year!", "Year Error", JOptionPane.ERROR_MESSAGE);
+    yearField.requestFocus(); // Set focus to the year field
+    return;
+}
+
+// Validate ISBN
+if (!isValidIsbn(isbn)) {
+    JOptionPane.showMessageDialog(this, "Invalid ISBN format! Please enter a valid ISBN.", "ISBN Error", JOptionPane.ERROR_MESSAGE);
+    isbnField.requestFocus(); // Set focus to the ISBN field
+    return;
+}
+
+// Save book to output.txt
+saveBookToFile(new Book(title, author, isbn, genre, year));
+
+
     }//GEN-LAST:event_addButtonActionPerformed
 
     private boolean isValidIsbn(Long isbn) {
