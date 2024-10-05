@@ -187,9 +187,10 @@ public class QueryHandler extends javax.swing.JFrame {
             }
         }
 
-        // Query logic
-        StringBuilder queryReport = new StringBuilder();
-        boolean found = false;
+          // Query logic
+    StringBuilder queryReport = new StringBuilder();
+    String queryType = ""; // String to store the query type
+    boolean found = false;
 
         // Clear previous results from the table
         tableModel.setRowCount(0); 
@@ -218,6 +219,10 @@ public class QueryHandler extends javax.swing.JFrame {
                         String genre = details[3].replace("Genre: ", "").trim();
                         String year = details[4].replace("Year: ", "").trim();
                         tableModel.addRow(new Object[]{title, author, isbn, genre, year});
+                        
+                         // Append book details to the query report
+                               queryReport.append(String.format("Title: %s\nAuthor: %s\nISBN: %s\nGenre: %s\nYear: %s\n\n", title, author, isbn, genre, year));
+
                     }
                 }
             }
@@ -232,15 +237,32 @@ public class QueryHandler extends javax.swing.JFrame {
                 String genre = details[3].replace("Genre: ", "").trim();
                 String year = details[4].replace("Year: ", "").trim();
                 tableModel.addRow(new Object[]{title, author, isbn, genre, year});
+                
+                 // Append book details to the query report
+                              queryReport.append(String.format("Title: %s\nAuthor: %s\nISBN: %s\nGenre: %s\nYear: %s\n\n", title, author, isbn, genre, year));
+
             }
 
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this, "Error reading the file: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
-
-        if (!found) {
-            JOptionPane.showMessageDialog(this, "No books found matching your query.", "No Results", JOptionPane.INFORMATION_MESSAGE);
+ if (!found) {
+        JOptionPane.showMessageDialog(this, "No books found matching your query.", "No Results", JOptionPane.INFORMATION_MESSAGE);
+    } else {
+        // Include the query type in the report
+        if (titleRadioButton.isSelected()) {
+            queryType = "Query by Title: " + titleField.getText().trim();
+        } else if (authorRadioButton.isSelected()) {
+            queryType = "Query by Author: " + authorField.getText().trim();
+        } else if (genreRadioButton.isSelected()) {
+            queryType = "Query by Genre: " + genreComboBox.getSelectedItem().toString();
+        } else if (isbnRadioButton.isSelected()) {
+            queryType = "Query by ISBN: " + isbnField.getText().trim();
         }
+
+        // Save the report to the report.txt
+        saveQueryReport("Query Type: " + queryType + "\n" + queryReport.toString());
+    }
         
         // Display the table in a dialog
     JOptionPane.showMessageDialog(this, scrollPane, "Books", JOptionPane.INFORMATION_MESSAGE);

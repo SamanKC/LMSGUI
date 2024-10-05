@@ -20,6 +20,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.table.DefaultTableModel; 
 import librarymanagementsystem.controller.FileUtils;
 import librarymanagementsystem.file.DefaultFileManager;
@@ -434,7 +435,29 @@ private boolean isValidISBN13(String isbn) {
     }//GEN-LAST:event_viewAllBooksActionPerformed
 
     private void generateReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateReportActionPerformed
-        // TODO add your handling code here:
+String reportFilePath = System.getProperty("user.dir") + "/output/report.txt";
+    StringBuilder reportContent = new StringBuilder();
+
+    try (BufferedReader reader = new BufferedReader(new FileReader(reportFilePath))) {
+        String line;
+        while ((line = reader.readLine()) != null) {
+            reportContent.append(line).append("\n");
+        }
+    } catch (IOException e) {
+        JOptionPane.showMessageDialog(this, "Error reading report file: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    // Show the report in a pop-up dialog
+    JTextArea textArea = new JTextArea(reportContent.toString());
+    textArea.setEditable(false); // Make it read-only
+    textArea.setLineWrap(true);
+    textArea.setWrapStyleWord(true);
+
+    JScrollPane scrollPane = new JScrollPane(textArea);
+    scrollPane.setPreferredSize(new Dimension(500, 300)); // Set preferred size for the dialog
+
+    JOptionPane.showMessageDialog(this, scrollPane, "Report", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_generateReportActionPerformed
 
     /**
