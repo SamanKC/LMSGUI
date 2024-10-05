@@ -1,0 +1,2 @@
+
+First the program should ask for the file. Then it should load first from the file(books.txt). then later when a user adds a book, it should add to the output.txt file. after that, when the user tries to view book, the program should ask whether it should read from the original books.txt or output.txt. the books.txt file should not be allowed to be modified, only change in the output.txt. so basicaly, do the add, delete, query in the output file only. the books.txt file is just for reading books in the first place.
